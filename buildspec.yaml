@@ -19,7 +19,7 @@ phases:
   build:
     commands:
       - echo "2. Build step"
-      - docker build -f ./deploy-helper/nginx/Dockerfile.nginx -t nginx .
+      - docker build -f ./deploy-helper/nginx/Dockerfile.nginx -t built-nginx .
       - docker build -f Dockerfile -t php-fpm .
   post_build:
     commands:
@@ -31,8 +31,8 @@ phases:
       - docker tag php-fpm:latest $AWS_ACCOUNT_ID.dkr.ecr.$ECR_IMAGE_REGION.amazonaws.com/duyvd/php-fpm:latest
       - docker push $AWS_ACCOUNT_ID.dkr.ecr.$ECR_IMAGE_REGION.amazonaws.com/duyvd/php-fpm:latest
       - echo "3.3 Create image definitions --------"
-      - printf "[{\"name\":\"php-fpm\",\"imageUri\":\"$AWS_ACCOUNT_ID.dkr.ecr.$ECR_IMAGE_REGION.amazonaws.com/duyvd/php-fpm:latest\"}," >> imagedefinitions.json
-      - printf "{\"name\":\"nginx\",\"imageUri\":\"$AWS_ACCOUNT_ID.dkr.ecr.$ECR_IMAGE_REGION.amazonaws.com/duyvd/built-nginx:latest\"}]" >> imagedefinitions.json
+      - printf "[{\"name\":\"php-fpm\",\"imageUri\":\"$AWS_ACCOUNT_ID.dkr.ecr.$ECR_IMAGE_REGION.amazonaws.com/php-fpm:latest\"}," >> imagedefinitions.json
+      - printf "{\"name\":\"nginx\",\"imageUri\":\"$AWS_ACCOUNT_ID.dkr.ecr.$ECR_IMAGE_REGION.amazonaws.com/built-nginx:latest\"}]" >> imagedefinitions.json
       - cat imagedefinitions.json
 
 artifacts:
